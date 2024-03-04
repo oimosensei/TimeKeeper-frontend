@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
 import { useMutateAuth } from "../hooks/useMutateAuth";
@@ -12,7 +12,27 @@ export const Header2 = () => {
 
   const logout = () => {
     logoutMutation.mutate(); // ログアウト処理を実行
+    setIsMenuOpen(false); // メニューを閉じる
   };
+
+  // メニューの開閉についての処理
+  const insideRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = insideRef.current;
+    if (!el) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      // メニューの外側をクリックした際の処理
+      if (el && !el.contains(e.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [insideRef]);
 
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center">
@@ -26,7 +46,13 @@ export const Header2 = () => {
       </ul>
       {/* モバイルビューで表示*/}
       {/* ハンバーガーメニューボタン */}
-      <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden">
+      <button
+        onClick={(event) => {
+          setIsMenuOpen(!isMenuOpen);
+          event?.stopPropagation();
+        }}
+        className="lg:hidden"
+      >
         {isMenuOpen ? (
           <XMarkIcon className="h-8 w-8" /> // メニューが開いているときはバツアイコン
         ) : (
@@ -34,6 +60,7 @@ export const Header2 = () => {
         )}
       </button>
       <div
+        ref={insideRef}
         className={`${
           isMenuOpen ? "block" : "hidden"
         } fixed top-16 right-6 mt-2 py-2 w-40 z-10 bg-gray-700 rounded-lg shadow-xl`}
@@ -43,12 +70,17 @@ export const Header2 = () => {
             <Link
               to="/attendance"
               className="block px-4 py-2 hover:bg-gray-600"
+              onClick={() => setIsMenuOpen(false)}
             >
               出勤・退勤ページ
             </Link>
           </li>
           <li>
-            <Link to="/calendar" className="block px-4 py-2 hover:bg-gray-600">
+            <Link
+              to="/calendar"
+              className="block px-4 py-2 hover:bg-gray-600"
+              onClick={() => setIsMenuOpen(false)}
+            >
               カレンダーページ
             </Link>
           </li>
