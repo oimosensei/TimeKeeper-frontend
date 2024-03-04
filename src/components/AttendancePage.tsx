@@ -46,6 +46,7 @@ export const AttendancePage = () => {
   }, []);
 
   useEffect(() => {
+    if (user) return;
     getUserMutation.mutate();
     console.log(user);
   }, []);
