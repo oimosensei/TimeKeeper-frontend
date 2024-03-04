@@ -23,15 +23,6 @@ export const CalendarPage = () => {
     setCurrentYear(newYear);
   };
 
-  const isToday = (date: Date) => {
-    const today = new Date();
-    return (
-      date.getFullYear() === today.getFullYear() &&
-      date.getMonth() === today.getMonth() &&
-      date.getDate() === today.getDate()
-    );
-  };
-
   // 日付をクリックしたときの処理
   const handleDateClick = (date: number) => {
     navigate(`/date/${currentYear}/${currentMonth + 1}/${date}`);
@@ -39,48 +30,23 @@ export const CalendarPage = () => {
 
   // 簡単なカレンダーの生成（ここでは実装の簡略化のため固定）
   const lastDay = new Date(currentYear, currentMonth + 1, 0).getDate();
-  const firstDayOfWeek = new Date(currentYear, currentMonth, 1).getDay();
-  const dates = Array.from(
-    { length: lastDay },
-    (_, i) => new Date(currentYear, currentMonth, i + 1)
-  );
-  // 曜日を表す配列
-  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+  const dates = Array.from({ length: lastDay }, (_, i) => i + 1);
 
   return (
-    <div className="flex flex-col items-center p-4 mx-auto max-w-md">
+    <div className="flex flex-col items-center p-4">
       <div className="flex justify-between w-full mb-4">
         <button onClick={() => changeMonth(-1)}>前の月</button>
-        <span className="text-2xl font-bold">{`${currentYear}年 ${
-          currentMonth + 1
-        }月`}</span>
+        <span>{`${currentYear}年 ${currentMonth + 1}月`}</span>
         <button onClick={() => changeMonth(1)}>次の月</button>
       </div>
-      {/* 曜日を表示 */}
-      <div className="grid grid-cols-7 gap-4 w-full">
-        {weekdays.map((day) => (
-          <div key={day} className="p-2 text-center font-bold">
-            {day}
-          </div>
-        ))}
-      </div>
-      {/* 日付を表示 */}
-      <div className="grid grid-cols-7 gap-4 w-full">
-        {/* 月の最初の日までの空の要素を追加 */}
-        {Array.from({ length: firstDayOfWeek }).map((_, index) => (
-          <div key={`empty-${index}`} className="p-2 border rounded-lg"></div>
-        ))}
-        {dates.map((date, index) => (
+      <div className="grid grid-cols-7 gap-4">
+        {dates.map((date) => (
           <div
-            key={index}
-            className={`p-2 border rounded-lg cursor-pointer text-center  ${
-              isToday(date)
-                ? "bg-yellow-300 hover:bg-yellow-400"
-                : "bg-white-300 hover:bg-gray-400"
-            } `}
-            onClick={() => handleDateClick(date.getDate())}
+            key={date}
+            className="p-2 border rounded-lg cursor-pointer text-center"
+            onClick={() => handleDateClick(date)}
           >
-            {date.getDate()}
+            {date}
           </div>
         ))}
       </div>
