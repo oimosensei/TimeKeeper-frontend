@@ -1,5 +1,5 @@
 import { useState, useEffect, FormEvent } from "react";
-import { FaceSmileIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
+import { CheckBadgeIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 import { useMutateAuth } from "../hooks/useMutateAuth";
 import { User } from "../types";
 import axios from "axios";
@@ -44,10 +44,10 @@ export const Auth = () => {
   //   }
   // }, [user]);
   return (
-    <div className="flex justify-start items-center flex-col min-h-screen text-gray-600 font-mono pt-10">
+    <div className="flex justify-center items-center flex-col min-h-screen text-gray-600 font-mono">
       <div className="flex items-center">
-        <FaceSmileIcon className="h-8 w-8 mr-2 text-blue-950" />
-        <span className="text-center text-3xl font-extrabold">TimeKeeper</span>
+        <CheckBadgeIcon className="h-8 w-8 mr-2 text-blue-500" />
+        <span className="text-center text-3xl font-extrabold">TverClip</span>
       </div>
       <h2 className="my-6">{isLogin ? "Login" : "Create a new account"}</h2>
       <form onSubmit={submitAuthHandler}>
@@ -74,7 +74,7 @@ export const Auth = () => {
         </div>
         <div className="flex justify-center my-2">
           <button
-            className="disabled:opacity-40 py-2 px-4 rounded text-white bg-gray-700"
+            className="disabled:opacity-40 py-2 px-4 rounded text-white bg-indigo-600"
             disabled={!email || !pw}
             type="submit"
           >
